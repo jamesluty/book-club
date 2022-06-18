@@ -15,6 +15,8 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.beans.factory.annotation.Value;
+
 @Entity
 @Table(name="books")
 public class Book {
@@ -32,6 +34,9 @@ public class Book {
 	
 	@NotEmpty(message="Thoughts are required!")
 	private String thoughts;
+	
+	@Value(value="false")
+	private boolean borrow;
 		
 	@Column(updatable=false)
 	private Date createdAt;
@@ -111,5 +116,13 @@ public class Book {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public boolean isBorrow() {
+		return borrow;
+	}
+
+	public void setBorrow(boolean borrow) {
+		this.borrow = borrow;
 	}
 }

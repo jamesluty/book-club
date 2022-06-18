@@ -43,6 +43,10 @@
 			<form:errors class="errors" path="thoughts"/>
 			<div class="btn">
 				<button class="btn btn-primary">Update</button>
+				<form action="/delete/${book.id }" method="post">
+				    <input type="hidden" name="_method" value="delete">
+				    <input class="btn btn-danger" type="submit" value="Delete">
+				</form>
 			</div>
 		</form:form>
 	</div>

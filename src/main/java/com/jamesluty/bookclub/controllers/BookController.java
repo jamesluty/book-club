@@ -53,6 +53,33 @@ public class BookController {
 		return "editBook.jsp";
 	}
 	
+	@GetMapping("/borrow/book")
+	public String broker(Model model, HttpSession session) {
+		if(session.getAttribute("uuid") == null) {
+			return "redirect:/";
+		}
+		model.addAttribute("borrowed", bookService.getAllAvailable());
+		model.addAttribute("available", bookService.getAllBorrowed());
+		model.addAttribute("user", userService.getUser((Long) session.getAttribute("uuid")));
+		return "broker.jsp";
+	}
+	
+	@GetMapping("/borrow/{id}")
+	public String borrowBook(@PathVariable("id") Long id) {
+		Book book = bookService.getBook(id);
+		book.setBorrow(true);
+		bookService.saveBook(book);
+		return "redirect:/borrow/book";
+	}
+	
+	@GetMapping("/return/{id}")
+	public String returnBook(@PathVariable("id") Long id) {
+		Book book = bookService.getBook(id);
+		book.setBorrow(false);
+		bookService.saveBook(book);
+		return "redirect:/borrow/book";
+	}
+	
 //	Action routes
 	@PostMapping("/create/book")
 	public String createBook(@Valid @ModelAttribute("book") Book book, BindingResult result, Model model, HttpSession session) {
@@ -61,6 +88,7 @@ public class BookController {
 		} else {
 			User user = userService.getUser((Long) session.getAttribute("uuid"));
 			book.setUser(user);
+			book.setBorrow(false);
 			bookService.saveBook(book);
 			return "redirect:/dashboard";
 		}

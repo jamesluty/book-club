@@ -24,6 +24,14 @@ public class BookService {
 		return bookRepo.findAll();
 	}
 	
+	public List<Book> getAllAvailable(){
+		return bookRepo.findByBorrowTrue();
+	}
+	
+	public List<Book> getAllBorrowed(){
+		return bookRepo.findByBorrowFalse();
+	}
+	
 	public Book getBook(Long id) {
 		return bookRepo.findById(id).orElse(null);
 	}
